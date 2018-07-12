@@ -136,7 +136,7 @@ function initialize()
 		opacity: 0.6
 	});
 	
-	let portalWidth = 2;
+	let portalWidth = 4;
 	let portalHeight = 4;
 	let portalBorder = 0.1;
 	
@@ -168,17 +168,18 @@ function initialize()
 	
 	// textures from http://www.humus.name/
 	let skyMaterialArray = [
-		new THREE.MeshBasicMaterial( { map: loader.load("img/portal/mountain/posx.jpg"), side: THREE.BackSide } ),
-		new THREE.MeshBasicMaterial( { map: loader.load("img/portal/mountain/negx.jpg"), side: THREE.BackSide } ),
-		new THREE.MeshBasicMaterial( { map: loader.load("img/portal/mountain/posy.jpg"), side: THREE.BackSide } ),
-		new THREE.MeshBasicMaterial( { map: loader.load("img/portal/mountain/negy.jpg"), side: THREE.BackSide } ),
-		new THREE.MeshBasicMaterial( { map: loader.load("img/portal/mountain/posz.jpg"), side: THREE.BackSide } ),
-		new THREE.MeshBasicMaterial( { map: loader.load("img/portal/mountain/negz.jpg"), side: THREE.BackSide } ),
+		new THREE.MeshBasicMaterial( { map: loader.load("img/portal/niagara/posx.jpg"), side: THREE.BackSide } ),
+		new THREE.MeshBasicMaterial( { map: loader.load("img/portal/niagara/negx.jpg"), side: THREE.BackSide } ),
+		new THREE.MeshBasicMaterial( { map: loader.load("img/portal/niagara/posy.jpg"), side: THREE.BackSide } ),
+		new THREE.MeshBasicMaterial( { map: loader.load("img/portal/niagara/negy.jpg"), side: THREE.BackSide } ),
+		new THREE.MeshBasicMaterial( { map: loader.load("img/portal/niagara/posz.jpg"), side: THREE.BackSide } ),
+		new THREE.MeshBasicMaterial( { map: loader.load("img/portal/niagara/negz.jpg"), side: THREE.BackSide } ),
 	];
 	let skyMesh = new THREE.Mesh(
 		new THREE.CubeGeometry(30,30,30),
 		skyMaterialArray );
   skyMesh.rotateX((-70 * Math.PI)/180);
+  skyMesh.rotateY((130 * Math.PI)/180);
 	skyMesh.layers.set(2);
 	smoothedRoot.add(skyMesh);
 
