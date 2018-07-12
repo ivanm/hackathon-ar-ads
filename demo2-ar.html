@@ -69,16 +69,11 @@
 
         var model = {};
         var loader = new THREE.GLTFLoader();
-        loader.load('models/headphones/scene.gltf', function ( gltf ) {
+        loader.load('models/htc/scene.gltf', function ( gltf ) {
 
             //HTC
-            // gltf.scene.scale.set(0.01,0.01,0.01);
-            // gltf.scene.position.setY(1);
-
-            //Headphones:
-            gltf.scene.rotateX((270 * Math.PI)/180);
-            gltf.scene.scale.set(0.3,0.3,0.3);
-            gltf.scene.position.setY(0.5);
+            gltf.scene.scale.set(0.01,0.01,0.01);
+            gltf.scene.position.setY(1);
 
             //Nike
             // gltf.scene.rotateX((270 * Math.PI)/180);
@@ -90,14 +85,14 @@
             scene.add( gltf.scene );
         });
 
-        var light = new THREE.HemisphereLight( 0xbbbbff, 0x444422, 3);
+        var light = new THREE.HemisphereLight( 0xbbbbff, 0x444422, 1);
         light.position.set( 0, 1, 0 );
         scene.add( light );
 
         onRenderFcts.push(function(delta){
             // mesh.rotation.x += Math.PI*delta;
             if (model.rotation) {
-                model.rotation.y += (Math.PI*delta)/8;
+                model.rotation.z += (Math.PI*delta)/8;
             }
         })
 
