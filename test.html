@@ -116,7 +116,7 @@ Source Paul lewis & https://stemkoski.github.io (Lee Stemkoski)
         })
     );
     ctaButton.position.z = -100;
-    ctaButton.position.y = -50;
+    ctaButton.position.y = -100;
     scene.add(ctaButton);
 
 
@@ -149,6 +149,7 @@ Source Paul lewis & https://stemkoski.github.io (Lee Stemkoski)
     var targetList = [];
     targetList.push(ctaButton);
     projector = new THREE.Projector();
+    document.addEventListener( 'click touchstart', onDocumentMouseDown, false );
     document.addEventListener( 'mousedown', onDocumentMouseDown, false );
 
     function onDocumentMouseDown( event )
@@ -174,6 +175,9 @@ Source Paul lewis & https://stemkoski.github.io (Lee Stemkoski)
         if ( intersects.length > 0 )
         {
             console.log(intersects[0]);
+            var hex = "0x" + "000000".replace(/0/g,function(){return (~~(Math.random()*16)).toString(16);});
+
+            sphere.material.color.setHex(hex);
             window.location = 'https://www.gumgum.com';
         }
     }
