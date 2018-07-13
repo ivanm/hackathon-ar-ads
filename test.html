@@ -1,0 +1,194 @@
+<!--
+Source Paul lewis & https://stemkoski.github.io (Lee Stemkoski)
+-->
+<!doctype html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title></title>
+  <style>
+    html, body {
+      padding: 0;
+      margin: 0;
+    }
+    #container{
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 3;
+        overflow: auto;
+        width: 100%;
+        height: 100%;
+    }
+    #videoContainer {
+        position: fixed;
+        width: 100%;
+    }
+    #videoElement {
+        width: 100%;
+    }
+  </style>
+</head>
+<body>
+    <div id="videoContainer">
+        <video autoplay="true" id="videoElement"></video>
+    </div>
+    <div id="container"></div>
+
+<script>
+    var video = document.querySelector("#videoElement");
+
+    if (navigator.mediaDevices.getUserMedia) {
+        navigator.mediaDevices.getUserMedia({video: true})
+      .then(function(stream) {
+        video.srcObject = stream;
+      })
+      .catch(function(err0r) {
+        console.log("Something went wrong!");
+      });
+    }
+</script>
+<script src="https://threejs.org/build/three.min.js"></script>
+<script src="https://threejs.org/examples/js/loaders/OBJLoader.js"></script>
+<script src="https://threejs.org/examples/js/loaders/MTLLoader.js"></script>
+<script src="https://threejs.org/examples/js/controls/OrbitControls.js"></script>
+<script src="https://threejs.org/examples/js/renderers/Projector.js"></script>
+  <script>
+    // Set the scene size.
+    const WIDTH = window.innerWidth;
+    const HEIGHT = window.innerHeight;
+
+    // Set some camera attributes.
+    const VIEW_ANGLE = 45;
+    const ASPECT = WIDTH / HEIGHT;
+    const NEAR = 0.1;
+    const FAR = 2000;
+
+    // Get the DOM element to attach to
+    const container = document.querySelector('#container');
+
+    // Create a WebGL renderer, camera
+    // and a scene
+    const renderer = new THREE.WebGLRenderer({ antialias: false,alpha:true });
+    renderer.setSize( window.innerWidth, window.innerHeight );
+    renderer.setClearColor(0x000000, 0); // transparent to see the video underneath
+
+    const camera = new THREE.PerspectiveCamera(VIEW_ANGLE,ASPECT,NEAR,FAR);
+    const scene = new THREE.Scene();
+
+// Controls camera mouvement
+    var controls = new THREE.OrbitControls( camera, renderer.domElement );
+
+//////////////
+// Objects  //
+//////////////
+// Glasses
+    var mtlLoader = new THREE.MTLLoader();
+    mtlLoader.setBaseUrl( 'models/glasses/' );
+    mtlLoader.setPath( 'models/glasses/' );
+    mtlLoader.load( 'RayBanz.mtl', function( materials ) {
+
+        materials.preload();
+
+        var objLoader = new THREE.OBJLoader();
+        objLoader.setMaterials( materials );
+        objLoader.load( 'models/glasses/RayBanz.obj', function ( object ) {
+
+        object.scale.set(0.3,0.3,0.3);
+        object.position.z = -300;
+        object.position.y =-20;
+        scene.add( object );
+        });
+    });
+
+// sphere 1
+    const sphere = new THREE.Mesh(
+        new THREE.SphereGeometry(25,10,10),new THREE.MeshLambertMaterial({color: 'red'})
+    );
+    sphere.position.z = -200;
+    sphere.position.y = -10;
+    scene.add(sphere);
+// Buy box
+    const ctaButton = new THREE.Mesh(
+        new THREE.BoxGeometry(50, 25, 5),new THREE.MeshLambertMaterial({
+            color: 'green',
+             map: THREE.ImageUtils.loadTexture( 'models/glasses/cta_nike.svg' )
+        })
+    );
+    ctaButton.position.z = -100;
+    ctaButton.position.y = -50;
+    scene.add(ctaButton);
+
+
+    // Add the camera to the scene.
+    scene.add(camera);
+    camera.position.set(0,0,100);
+    camera.lookAt(scene.position);
+
+    // Start the renderer.
+    renderer.setSize(WIDTH, HEIGHT);
+
+    // Attach the renderer-supplied
+    // DOM element.
+    container.appendChild(renderer.domElement);
+
+    // create a point light
+    const pointLight =
+      new THREE.PointLight(0xFFFFFF);
+
+    // set its position
+    pointLight.position.x = 10;
+    pointLight.position.y = 50;
+    pointLight.position.z = 130;
+
+    // add to the scene
+    scene.add(pointLight);
+
+// Click on cta button
+    var projector, mouse = { x: 0, y: 0 };
+    var targetList = [];
+    targetList.push(ctaButton);
+    projector = new THREE.Projector();
+    document.addEventListener( 'mousedown', onDocumentMouseDown, false );
+
+    function onDocumentMouseDown( event )
+    {
+        console.log("Click.");
+
+        // update the mouse variable
+        mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+        mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+
+        // find intersections
+
+        // create a Ray with origin at the mouse position
+        //   and direction into the scene (camera direction)
+        var vector = new THREE.Vector3( mouse.x, mouse.y, 1 );
+        projector.unprojectVector( vector, camera );
+        var ray = new THREE.Raycaster( camera.position, vector.sub( camera.position ).normalize() );
+
+        // create an array containing all objects in the scene with which the ray intersects
+        var intersects = ray.intersectObjects( targetList );
+
+        // if there is one (or more) intersections
+        if ( intersects.length > 0 )
+        {
+            console.log(intersects[0]);
+            window.location = 'https://www.gumgum.com';
+        }
+    }
+    function animate () {
+        requestAnimationFrame( animate );
+        update();
+        render();
+    }
+    function update () {
+        controls.update();
+    }
+    function render () {
+        renderer.render( scene, camera );
+    }
+    animate();
+  </script>
+</body>
+</html>
