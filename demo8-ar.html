@@ -113,8 +113,8 @@ function initialize()
 	let smoothedRoot = new THREE.Group();
 	scene.add(smoothedRoot);
 	smoothedControls = new THREEx.ArSmoothedControls(smoothedRoot, {
-		lerpPosition: 0.5,
-		lerpQuaternion: 0.5,
+		lerpPosition: 0.2,
+		lerpQuaternion: 0.2,
 		lerpScale: 1,
 		// minVisibleDelay: 1,
 		// minUnvisibleDelay: 1,
@@ -136,7 +136,7 @@ function initialize()
 		opacity: 0.6
 	});
 	
-	let portalWidth = 4;
+	let portalWidth = 8;
 	let portalHeight = 4;
 	let portalBorder = 0.1;
 	
@@ -145,7 +145,7 @@ function initialize()
 		defaultMaterial
 	);
 	portal.position.y = portalHeight/2 + portalBorder;
-  
+  portal.position.y = portal.position.y - 5;
   portal.rotateX((90 * Math.PI)/180);
 	portal.layers.set(1);
 	smoothedRoot.add(portal);
@@ -160,6 +160,7 @@ function initialize()
 		portalMaterial
 	);
 	portalBorderMesh.position.y = portal.position.y;
+  portalBorderMesh.position.z = portal.position.z;
 	portalBorderMesh.layers.set(0);
   portalBorderMesh.rotateX((90 * Math.PI)/180);
 	smoothedRoot.add(portalBorderMesh);
@@ -180,6 +181,7 @@ function initialize()
 		skyMaterialArray );
   skyMesh.rotateX((-70 * Math.PI)/180);
   skyMesh.rotateY((130 * Math.PI)/180);
+  skyMesh.rotateZ((-20 * Math.PI)/180);
 	skyMesh.layers.set(2);
 	smoothedRoot.add(skyMesh);
 
